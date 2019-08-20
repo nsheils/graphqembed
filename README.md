@@ -16,11 +16,11 @@ Unzip the data in your working directory.
 
 ### Running the code
 
-To train a model on the Bio data, run `python -m nqe.bio.train`.
+To train a model on the Bio data, run `python -m netquery.bio.train`.
 See that file for a list of possible arguments, and note that by default it assumes that the data is in a subdirectory of your working directory (i.e., "./bio_data).
 By default the model will log its output and store a version of the model after training.
 The train, test, and validation performance will be recorded in the log file. 
-If you are training with a GPU be sure to add the cuda flag, i.e., `python -m nqe.bio.train --cuda`. 
+If you are training with a GPU be sure to add the cuda flag, i.e., `python -m netquery.bio.train --cuda`. 
 The default parameters correspond to the best performing variant from the paper. 
 
 NB: Currently the training files are not-portable pickle files. 
