@@ -26,18 +26,18 @@ parser.add_argument("--inter_decoder", type=str, default="mean")
 parser.add_argument("--opt", type=str, default="adam")
 args = parser.parse_args()
 
-print "Loading graph data.."
+print("Loading graph data..")
 graph, feature_modules, node_maps = load_graph(args.data_dir, args.embed_dim)
 if args.cuda:
     graph.features = cudify(feature_modules, node_maps)
 out_dims = {mode:args.embed_dim for mode in graph.relations}
 
-print "Loading edge data.."
+print("Loading edge data..")
 train_queries = load_queries_by_formula(args.data_dir + "/train_edges.pkl")
 val_queries = load_test_queries_by_formula(args.data_dir + "/val_edges.pkl")
 test_queries = load_test_queries_by_formula(args.data_dir + "/test_edges.pkl")
 
-print "Loading query data.."
+print("Loading query data..")
 for i in range(2,4):
     train_queries.update(load_queries_by_formula(args.data_dir + "/train_queries_{:d}.pkl".format(i)))
     i_val_queries = load_test_queries_by_formula(args.data_dir + "/val_queries_{:d}.pkl".format(i))
