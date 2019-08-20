@@ -113,18 +113,18 @@ class Graph():
         self.full_sets = defaultdict(set)
         self.full_lists = {}
         self.meta_neighs = defaultdict(dict)
-        for rel, adjs in self.adj_lists.iteritems():
+        for rel, adjs in self.adj_lists.items():
             full_set = set(self.adj_lists[rel].keys())
             self.full_sets[rel[0]] = self.full_sets[rel[0]].union(full_set)
-        for mode, full_set in self.full_sets.iteritems():
+        for mode, full_set in self.full_sets.items():
             self.full_lists[mode] = list(full_set)
         self._cache_edge_counts()
         self._make_flat_adj_lists()
 
     def _make_flat_adj_lists(self):
         self.flat_adj_lists = defaultdict(lambda : defaultdict(list))
-        for rel, adjs in self.adj_lists.iteritems():
-            for node, neighs in adjs.iteritems():
+        for rel, adjs in self.adj_lists.items():
+            for node, neighs in adjs.items():
                 self.flat_adj_lists[rel[0]][node].extend([(rel, neigh) for neigh in neighs])
 
     def _cache_edge_counts(self):
@@ -140,10 +140,10 @@ class Graph():
         self.rel_weights = OrderedDict()
         self.mode_edges = defaultdict(float)
         self.mode_weights = OrderedDict()
-        for rel, edge_count in self.rel_edges.iteritems():
+        for rel, edge_count in self.rel_edges.items():
             self.rel_weights[rel] = edge_count / self.edges
             self.mode_edges[rel[0]] += edge_count
-        for mode, edge_count in self.mode_edges.iteritems():
+        for mode, edge_count in self.mode_edges.items():
             self.mode_weights[mode] = edge_count / self.edges
 
     def remove_edges(self, edge_list):
@@ -167,10 +167,10 @@ class Graph():
         """
         edges = []
         random.seed(seed)
-        for rel, adjs in self.adj_lists.iteritems():
+        for rel, adjs in self.adj_lists.items():
             if rel in exclude_rels:
                 continue
-            for node, neighs in adjs.iteritems():
+            for node, neighs in adjs.items():
                 edges.extend([(node, rel, neigh) for neigh in neighs if neigh != -1])
         random.shuffle(edges)
         return edges
@@ -179,10 +179,10 @@ class Graph():
             exclude_rels=set([])):
         random.seed(seed)
         edges = defaultdict(list)
-        for rel, adjs in self.adj_lists.iteritems():
+        for rel, adjs in self.adj_lists.items():
             if rel in exclude_rels:
                 continue
-            for node, neighs in adjs.iteritems():
+            for node, neighs in adjs.items():
                 edges[(rel,)].extend([(node, neigh) for neigh in neighs if neigh != -1])
 
     def get_negative_edge_samples(self, edge, num, rejection_sample=True):
@@ -216,7 +216,7 @@ class Graph():
                 queries.append(query)
                 sampled += 1
                 if sampled % 1000 == 0 and verbose:
-                    print "Sampled", sampled
+                    print("Sampled", sampled)
         return queries
 
     def sample_queries(self, arity, num_samples, neg_sample_max, verbose=True):
@@ -233,7 +233,7 @@ class Graph():
             queries.append(query)
             sampled += 1
             if sampled % 1000 == 0 and verbose:
-                print "Sampled", sampled
+                print("Sampled", sampled)
         return queries
 
 

@@ -1,5 +1,5 @@
 import numpy as np
-from utils import eval_auc_queries, eval_perc_queries
+from netquery.utils import eval_auc_queries, eval_perc_queries
 import torch
 
 def check_conv(vals, window=2, tol=1e-6):
@@ -19,7 +19,7 @@ def update_loss(loss, losses, ema_loss, ema_alpha=0.01):
 def run_eval(model, queries, iteration, logger, by_type=False):
     vals = {}
     def _print_by_rel(rel_aucs, logger):
-        for rels, auc in rel_aucs.iteritems():
+        for rels, auc in rel_aucs.items():
             logger.info(str(rels) + "\t" + str(auc))
     for query_type in queries["one_neg"]:
         auc, rel_aucs = eval_auc_queries(queries["one_neg"][query_type], model)
@@ -45,7 +45,7 @@ def run_train(model, optimizer, train_queries, val_queries, test_queries, logger
     vals = []
     losses = []
     conv_test = None
-    for i in xrange(max_iter):
+    for i in range(max_iter):
         
         optimizer.zero_grad()
         loss = run_batch(train_queries["1-chain"], model, i, batch_size)
@@ -74,7 +74,7 @@ def run_train(model, optimizer, train_queries, val_queries, test_queries, logger
                     logger.info("Fully converged at iteration {:d}".format(i))
                     break
 
-        losses, ema_loss = update_loss(loss.data[0], losses, ema_loss)
+        losses, ema_loss = update_loss(loss.item(), losses, ema_loss)
         loss.backward()
         optimizer.step()
             
@@ -97,7 +97,7 @@ def run_batch(train_queries, enc_dec, iter_count, batch_size, hard_negatives=Fal
     denom = float(sum(num_queries))
     formula_index = np.argmax(np.random.multinomial(1, 
             np.array(num_queries)/denom))
-    formula = train_queries.keys()[formula_index]
+    formula = list(train_queries.keys())[formula_index]
     n = len(train_queries[formula])
     start = (iter_count * batch_size) % n
     end = min(((iter_count+1) * batch_size) % n, n)
