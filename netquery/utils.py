@@ -2,14 +2,14 @@ import numpy as np
 import scipy
 import scipy.stats as stats
 import torch
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, accuracy_score
 from netquery.decoders import BilinearMetapathDecoder, TransEMetapathDecoder, BilinearDiagMetapathDecoder, SetIntersection, SimpleSetIntersection
 from netquery.encoders import DirectEncoder, Encoder
 from netquery.aggregators import MeanAggregator
-#import cPickle as pickle
 import pickle
 import logging
 import random
+
 
 """
 Misc utility functions..
@@ -55,6 +55,7 @@ def eval_auc_queries(test_queries, enc_dec, batch_size=1000, hard_negatives=Fals
             offset += batch_size
 
             formula_labels.extend([1 for _ in range(len(lengths))])
+            formula_labels.extend([0 for _ in range(len(negatives))])
             batch_scores = enc_dec.forward(formula, 
                     batch_queries+[b for i, b in enumerate(batch_queries) for _ in range(lengths[i])], 
                     [q.target_node for q in batch_queries] + negatives)
